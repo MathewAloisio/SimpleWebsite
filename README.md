@@ -1,5 +1,5 @@
 ## SimpleWebsite
-An example website that uses MySQL, Sequelize, Node.js, HTML, and CSS.
+An example website that uses Sequelize (MySQL), Node.js, jQuery, HTML, and CSS.
 
 # Coming soon!
 
@@ -31,4 +31,4 @@ An example website that uses MySQL, Sequelize, Node.js, HTML, and CSS.
 - Node.js - https://nodejs.org/en/
 - Express - https://expressjs.com/
 - Sequelize - http://docs.sequelizejs.com/
-
+- jQuery - https://jquery.com/
