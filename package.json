@@ -1,0 +1,29 @@
+{
+  "name": "simplewebsite",
+  "version": "1.0.0",
+  "description": "A simple website that uses MySQL, Node.js, CSS, and HTML.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MathewAloisio/SimpleWebsite.git"
+  },
+  "author": "Mathew Aloisio",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/MathewAloisio/SimpleWebsite/issues"
+  },
+  "homepage": "https://github.com/MathewAloisio/SimpleWebsite#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "jquery": "^3.4.0",
+    "mysql": "^2.17.1",
+    "mysql2": "^1.6.5",
+    "nodemailer": "^6.1.1",
+    "sequelize": "^5.8.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+	"Port": "1234",
+	"MySQL": {
+		"Host": "localhost",
+		"Username": "user",
+		"Password": "Default1",
+		"Database": "simplewebsite",
+		"Debug": "0",
+		"Pool": {
+			"ConnectionLimit": "10",
+			"MaxIdleTime": "10000",
+			"MaxAcquireTime": "60000",
+			"EvictTime": "1000"
+		}
+	},
+	"Mail": {
+		"Host": "smtp.gmail.com",
+		"Port": "465",
+		"Secure": "1",
+		"Username": "simplewebsite0101@gmail.com",
+		"Password": "SimpleWebsite123"
+	}
+}

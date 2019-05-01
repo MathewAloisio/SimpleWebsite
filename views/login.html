@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="css/default.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="div_centered"">
+<h1 class="text_title">Login</h1><br>
+<form id="loginForm">
+    Username:<br>
+    <input type="text" name="usernameEntry"><br>
+    Password:<br>
+    <input type="text" name="passwordEntry"><br>
+</form> 
+<button id="loginButton">Login</button><br>
+<button id="signupButton">Sign Up</button><br>
+<div id="div_result"></div>
+
+<script>
+$("#loginButton").click(() => {
+    // Send form data using ajax post request.
+    $.post("/login", $("#loginForm").serialize()).done((pData) => {
+        // Handle data received from server.
+        if (pData.success) {
+            $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
+            //setTimeout(() => { window.location.replace("/user"); }, 2) //TODO redirect to user page.
+        }
+        else { $("#div_result").html("<p>Invalid username/password!</p>"); }
+    });
+});
+
+$("#signupButton").click(() => {
+    // Request the registration page.
+    window.location.replace("/register");
+});
+</script>
+</div>
+</body>
+
+</html> 

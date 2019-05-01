@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="css/default.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="div_centered">
+<h1 class="text_title">Register</h1><br>
+<form id="registerForm">
+    Username:<br>
+    <input type="text" name="usernameEntry"><br>
+    Password:<br>
+    <input type="text" name="passwordEntry"><br>
+    Email:<br>
+    <input type="text" name="emailEntry"><br>
+</form> 
+<button id="registerButton">Register</button><br>
+<button id="returnToLoginButton">Return to Login</button><br>
+<div id="div_result"></div>
+
+<script>
+$("#registerButton").click(() => {
+    // Send form data using ajax post request.
+    $.post("/register", $("#registerForm").serialize()).done((pData) => {
+        // Handle data received from server.
+        switch (pData.result) {
+            case "success":
+                $("#div_result").html("<p>Registration successful! Returning to login page...</p>");
+                setTimeout(() => { window.location.replace("/login"); }, 2);
+                break;
+            case "failed":
+                $("#div_result").html("<p>Failed to add account to MySQL database!</p>");
+                break;
+            case "syncfail":
+                $("#div_result").html("<p>Failed to synchronize MySQL database!</p>");
+                break;
+            case "nameinuse":
+                $("#div_result").html("<p>Registration failed! Username already in use.</p>");
+                break;
+        }
+        if (pData.success) {
+            $("#div_result").html("<p>Registration successful! Returning to login page...</p>");
+            setTimeout(() => { window.location.replace("/login"); }, 2);
+        }
+    });
+});
+
+$("#returnToLoginButton").click(() => {
+    window.location.replace("/login");
+});
+</script>
+</div>
+</body>
+
+</html> 
