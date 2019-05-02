@@ -3,6 +3,7 @@ const fs = require("fs");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 const database = require("./core/modules/database");
 const Account = require("./models/account");
@@ -21,22 +22,34 @@ database.connect();
 // Tell the app which directories to treat as static asset directories.
 app.use(express.static("public"));
 
+// Tell the app to use cookie parser.
+app.use(cookieParser(configuration.Cookies.Secret));
+
 // Setup body-parser.
 const bodyParserURLEncoded = bodyParser.urlencoded({ extended: true });
 
 // Define the express application behaviour.
 // GET - "/"
 app.get("/", (pRequest, pResponse) => {
-   pResponse.redirect("/login");
+   // Go to the login page if the user isn't logged in, otherwise their user page.
+   if (pRequest.signedCookies.accountID == undefined) {
+      pResponse.redirect("/login");
+   }
+   else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
 });
 
 // GET - "/login"
 app.get("/login", (pRequest, pResponse) => {
-   pResponse.sendFile("views/login.html", { root: __dirname });
+   if (pRequest.signedCookies.accountID == undefined) {
+      // User isn't logged in, send them the login page.
+      pResponse.sendFile("views/login.html", { root: __dirname });
+   }
+   else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
 });
 
 // POST - "/login"
 app.post("/login", bodyParserURLEncoded, function(pRequest, pResponse) {
+   if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
    // Lookup user by username.
    if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
       Account.findOne({
@@ -47,10 +60,16 @@ app.post("/login", bodyParserURLEncoded, function(pRequest, pResponse) {
       .then((pUser) => {
          if (pUser) {
             bcrypt.compare(pRequest.body.passwordEntry, pUser.password, (pError, pMatch) => {
-               if (pError || !pMatch) {
-                  pResponse.send({ success: false });
+               if (!pError && pMatch) {
+                  // Login successful! 
+                  // Set the account's lastlogin date to now.
+                  pUser.update({ date_lastlogin: new Date() });
+
+                  // Set the user's accountID cookie to the corresponding account ID and send a successful login response.
+                  pResponse.cookie("accountID", pUser.id, { signed: true });
+                  pResponse.send({ success: true });
                }
-               else { pResponse.send({ success: true }); }
+               else { pResponse.send({ success: false });  }
             });
          }
          else { pResponse.send({ success: false }); }
@@ -61,11 +80,16 @@ app.post("/login", bodyParserURLEncoded, function(pRequest, pResponse) {
 
 // GET - "/register"
 app.get("/register", (pRequest, pResponse) => {
-   pResponse.sendFile("views/register.html", { root: __dirname });
+   if (pRequest.signedCookies.accountID == undefined) {
+      // User isn't logged in, send them the register page.
+      pResponse.sendFile("views/register.html", { root: __dirname });
+   }
+   else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
 });
 
 // POST - "/register"
 app.post("/register", bodyParserURLEncoded, (pRequest, pResponse) => {
+   if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
    if (pRequest.body.usernameEntry && pRequest.body.passwordEntry && pRequest.body.emailEntry) {
       // Check if the username is in use.
       Account.findOne({
@@ -113,15 +137,46 @@ app.post("/register", bodyParserURLEncoded, (pRequest, pResponse) => {
 
 // GET - "/recover"
 app.get("/recover", (pRequest, pResponse) => {
-   pResponse.sendFile("views/recover.html", { root: __dirname });
+   if (pRequest.signedCookies.accountID == undefined) {
+      // User isn't logged in, send them the recover password page.
+      pResponse.sendFile("views/recover.html", { root: __dirname });
+   }
+   else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
 });
 
 // POST - "/recover"
 app.post("/recover", (pRequest, pResponse) => {
+   if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
    if (pRequestBody.body.usernameEntry) {
       //TODO lookup username in database, send reset password email.
    }
 });
+
+// GET - "/logout"
+app.get("/logout", (pRequest, pResponse) => {
+   // Clear account ID cookie on logout, redirect user to login page.
+   pResponse.clearCookie("viewingAccountID");
+   pResponse.clearCookie("accountID");
+   pResponse.redirect("/login");
+});
+
+// ExpressJS routing documentation - https://expressjs.com/en/guide/routing.html
+// GET - /accounts/:accountID
+app.get("/accounts/:accountID", (pRequest, pResponse) => {
+   if (pRequest.signedCookies.accountID != undefined) {
+      // Update viewingAccountID cookie before sending the HTML.
+      pResponse.cookie("viewingAccountID", pRequest.param.accountID, { signed: true });
+      pResponse.sendFile("views/accountOverview.html", { root: __dirname });
+   }
+   else { pResponse.redirect("/login"); } // Redirect users to the login page if they aren't signed in as signed-out users may not view accounts.
+});
+
+// POST - /accounts/:accountID
+app.post("/accounts/:accountID", (pRequest, pResponse) => {
+   if (pRequest.signedCookies.accountID == undefined || pRequest.signedCookies.viewingAccountID == undefined) return; // Skip this post request if the user is not logged in, or not viewing an account page.
+   //TODO: 
+});
+
 
 // Create the server listener.
 var server = app.listen(parseInt(configuration.Port, 10), function() {

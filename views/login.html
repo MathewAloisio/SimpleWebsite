@@ -20,13 +20,23 @@
 <div id="div_result"></div>
 
 <script>
+const getCookie = function(pName) {
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; ++i) {
+        let pair = cookies[i].trim().split('='); // Split key=value into key, value pair.
+        if(pair[0] == pName) return pair[1];
+    }
+
+    return null;
+};
+
 $("#loginButton").click(() => {
     // Send form data using ajax post request.
     $.post("/login", $("#loginForm").serialize()).done((pData) => {
         // Handle data received from server.
         if (pData.success) {
             $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
-            //setTimeout(() => { window.location.replace("/user"); }, 2) //TODO redirect to user page.
+            setTimeout(() => { window.location.replace("/accounts/" + getCookie("accountID")); }, 2); //TODO redirect to user page.
         }
         else { $("#div_result").html("<p>Invalid username/password!</p>"); }
     });

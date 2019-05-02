@@ -19,5 +19,8 @@
 		"Secure": "1",
 		"Username": "simplewebsite0101@gmail.com",
 		"Password": "SimpleWebsite123"
+	},
+	"Cookies": {
+		"Secret": "SimpleWebsite"
 	}
 }
