@@ -33,10 +33,7 @@ Account.init(
             type: Sequelize.DATE
         }
     }, 
-    { 
-        sequelize: database.getSequelize(), 
-        modelName: "accounts"
-    }
+    { sequelize: database.getSequelize() }
 );
 
 // Export the module.

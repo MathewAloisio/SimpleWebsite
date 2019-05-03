@@ -11,7 +11,12 @@ const configuration = JSON.parse(fs.readFileSync("core/cfg/configuration.json"))
 
 // Create the express app.
 var app = express();
+
+// Connect to the MySQL database and sync all models.
 database.connect();
+database.getSequelize().sync()
+.then(() => { console.log("MySQL: Models synced wih database!"); })
+.catch(() => { console.log("MySQL: Failed to sync models with MySQL database!"); });
 
 // Tell the app which directories to treat as static asset directories.
 app.use(express.static("public"));

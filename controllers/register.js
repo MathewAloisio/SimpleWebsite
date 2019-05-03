@@ -21,11 +21,7 @@ module.exports = function(pRouter) {
       if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry && pRequest.body.emailEntry) {
          // Check if the username is in use.
-         Account.findOne({
-            where: {
-               username: pRequest.body.usernameEntry
-            }
-         })
+         Account.findOne({ where: { username: pRequest.body.usernameEntry } })
          .then((pUser) => {
             if (!pUser) {
                // Username NOT in use.
@@ -33,27 +29,20 @@ module.exports = function(pRouter) {
                bcrypt.hash(pRequest.body.passwordEntry, 12, (pError, pHash) => {
                   if (!pError) {
                      // Create the user's data model.
-                     database.getSequelize().sync()
+                     Account.create({
+                        username: pRequest.body.usernameEntry,
+                        password: pHash,
+                        email: pRequest.body.emailEntry,
+                        date_registered: new Date(),
+                        date_lastlogin: null
+                     })
                      .then(() => {
-                        Account.create({
-                           username: pRequest.body.usernameEntry,
-                           password: pHash,
-                           email: pRequest.body.emailEntry,
-                           date_registered: new Date(),
-                           date_lastlogin: null
-                        })
-                        .then(() => {
-                           // Registration succeded.
-                           pResponse.send({ result: "success" });
-                        })
-                        .catch(() => { 
-                           // Registration failed.
-                           pResponse.send({ result: "failed" });
-                        })
+                        // Registration succeded.
+                        pResponse.send({ result: "success" });
                      })
                      .catch(() => { 
                         // Registration failed.
-                        pResponse.send({ result: "syncfail" });
+                        pResponse.send({ result: "failed" });
                      })
                   }
                   else { logger.log("Failed to create account! Password hash failed."); }

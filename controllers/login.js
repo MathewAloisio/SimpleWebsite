@@ -1,5 +1,6 @@
 // Import required module(s).
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 const Account = require(path.resolve("models/account"));
 
@@ -19,7 +20,7 @@ module.exports = function(pRouter) {
       if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
       // Lookup user by username.
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
-         Account.findOne({ where: { username: pRequest.body.usernameEntry }})
+         Account.findOne({ where: { username: pRequest.body.usernameEntry } })
          .then((pUser) => {
             if (pUser) {
                bcrypt.compare(pRequest.body.passwordEntry, pUser.password)
@@ -35,7 +36,7 @@ module.exports = function(pRouter) {
                   }
                   else { pResponse.send({ success: false });  }
                })
-               .catch((pError) => { pResponse.send({ success: false }); })
+               .catch(() => { pResponse.send({ success: false }); })
             }
             else { pResponse.send({ success: false }); }
          })
