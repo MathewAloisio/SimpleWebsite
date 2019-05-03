@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="/css/default.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
@@ -24,12 +24,12 @@
 <script>
 $("#registerButton").click(() => {
     // Send form data using ajax post request.
-    $.post("/register", $("#registerForm").serialize()).done((pData) => {
+    $.post("/auth/register", $("#registerForm").serialize()).done((pData) => {
         // Handle data received from server.
         switch (pData.result) {
             case "success":
                 $("#div_result").html("<p>Registration successful! Returning to login page...</p>");
-                setTimeout(() => { window.location.replace("/login"); }, 2);
+                setTimeout(() => { window.location.replace("/auth/login"); }, 2);
                 break;
             case "failed":
                 $("#div_result").html("<p>Failed to add account to MySQL database!</p>");
@@ -45,7 +45,7 @@ $("#registerButton").click(() => {
 });
 
 $("#returnToLoginButton").click(() => {
-    window.location.replace("/login");
+    window.location.replace("/auth/login");
 });
 </script>
 </div>

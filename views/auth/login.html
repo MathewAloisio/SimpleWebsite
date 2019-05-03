@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="/css/default.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
@@ -33,7 +33,7 @@ const getCookie = function(pName) {
 
 $("#loginButton").click(() => {
     // Send form data using ajax post request.
-    $.post("/login", $("#loginForm").serialize()).done((pData) => {
+    $.post("/auth/login", $("#loginForm").serialize()).done((pData) => {
         // Handle data received from server.
         if (pData.success) {
             $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
@@ -45,12 +45,12 @@ $("#loginButton").click(() => {
 
 $("#signupButton").click(() => {
     // Request the registration page.
-    window.location.replace("/register");
+    window.location.replace("/auth/register");
 });
 
 $("#recoverPasswordButton").click(() => {
     // Request the recover password page.
-    window.location.replace("/recoverPassword");
+    window.location.replace("/auth/recoverPassword");
 });
 </script>
 </div>

@@ -2,23 +2,24 @@
 const path = require("path");
 const bcrypt = require("bcrypt");
 
+const errorCodes = require(path.resolve("core/modules/errorCodes"));
 const database = require(path.resolve("core/modules/database"));
 const Account = require(path.resolve("models/account"));
 
 module.exports = function(pRouter) {
-   // Route: /register
-   // GET - "/register"
-   pRouter.get("/register", (pRequest, pResponse) => {
+   // Route: /auth/register
+   // GET - "/auth/register"
+   pRouter.get("/auth/register", (pRequest, pResponse) => {
       if (pRequest.signedCookies.accountID == undefined) {
          // User isn't logged in, send them the register page.
-         pResponse.sendFile(path.resolve("views/register.html"));
+         pResponse.sendFile(path.resolve("views/auth/register.html"));
       }
       else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
    });
 
-   // POST - "/register"
-   pRouter.post("/register", (pRequest, pResponse) => {
-      if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
+   // POST - "/auth/register"
+   pRouter.post("/auth/register", (pRequest, pResponse) => {
+      if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry && pRequest.body.emailEntry) {
          // Check if the username is in use.
          Account.findOne({ where: { username: pRequest.body.usernameEntry } })

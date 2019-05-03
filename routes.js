@@ -9,23 +9,24 @@ const router = express.Router();
 // Route: /index
 require("./controllers/index")(router);
 
-// Route: /login
-require("./controllers/login")(router);
-
-// Route: /logout
-require("./controllers/logout")(router);
-
-// Route: /register
-require("./controllers/register")(router);
-
 // Route: /accounts
 require("./controllers/accounts")(router);
 
-// Route: /verifyEmail
-require("./controllers/verifyEmail")(router);
+// Sub-route: auth (authentication)
+// Route: /auth/login
+require("./controllers/auth/login")(router);
 
-// Route: /recoverPassword
-require("./controllers/recoverPassword")(router);
+// Route: /auth/logout
+require("./controllers/auth/logout")(router);
+
+// Route: /auth/register
+require("./controllers/auth/register")(router);
+
+// Route: /auth/verifyEmail
+require("./controllers/auth/verifyEmail")(router);
+
+// Route: /auth/recoverPassword
+require("./controllers/auth/recoverPassword")(router);
 //--END OF ROUTES--//
 
 // Export the module.

@@ -2,22 +2,23 @@
 const path = require("path");
 const bcrypt = require("bcrypt");
 
+const errorCodes = require(path.resolve("core/modules/errorCodes"));
 const Account = require(path.resolve("models/account"));
 
 module.exports = function(pRouter) {
-   // Route: /login
-   // GET - "/login"
-   pRouter.get("/login", (pRequest, pResponse) => {
+   // Route: /auth/login
+   // GET - "/auth/login"
+   pRouter.get("/auth/login", (pRequest, pResponse) => {
       if (pRequest.signedCookies.accountID == undefined) {
          // User isn't logged in, send them the login page.
-         pResponse.sendFile(path.resolve("views/login.html"));
+         pResponse.sendFile(path.resolve("views/auth/login.html"));
       }
       else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
    });
    
-   // POST - "/login"
-   pRouter.post("/login", function(pRequest, pResponse) {
-      if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
+   // POST - "/auth/login"
+   pRouter.post("/auth/login", function(pRequest, pResponse) {
+      if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
       // Lookup user by username.
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
          Account.findOne({ attributes: ["id", "password"], where: { username: pRequest.body.usernameEntry } })

@@ -10,7 +10,7 @@ module.exports = function(pRouter) {
         pResponse.cookie("viewingAccountID", pRequest.param.accountID, { signed: true });
         pResponse.sendFile(path.resolve("views/accountOverview.html"));
         }
-        else { pResponse.redirect("/login"); } // Redirect users to the login page if they aren't signed in as signed-out users may not view accounts.
+        else { pResponse.redirect("/auth/login"); } // Redirect users to the login page if they aren't signed in as signed-out users may not view accounts.
     });
     
     // POST - /accounts/:accountID
