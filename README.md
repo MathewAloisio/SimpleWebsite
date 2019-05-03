@@ -15,17 +15,22 @@ An example website that uses Sequelize (MySQL), Node.js, jQuery, HTML, and CSS.
 > * account.js *- A Sequelize model for user accounts.*
 
 > **views**
-> * index.html *- The HTML code for the index page.*
-> * register.html *- The HTML code from the register page.*
-> * recover.html *- The HTML code from the recover page.*
+> - Contains all user-facing data, such as HTML files.
 
 
 > **public**
 > * **css**
-> 	* default.css *- The default style for SimpleWebsite.*
+> - Contains all the CSS files for the project.
 
 > **logs**
 > - A folder that contains debugging logs.
+
+> **controllers** (aka 'routes').
+> - Contains the website logic for given routes.
+
+> routes.js *- The routing control file for the project.*
+
+> server.js *- The main file for the project.*
 
 # References
 - Node.js - https://nodejs.org/en/

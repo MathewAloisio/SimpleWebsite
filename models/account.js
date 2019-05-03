@@ -1,8 +1,8 @@
 // Import required modules.
-const bcrypt = require("bcrypt");
+const path = require("path");
 const Sequelize = require("sequelize");
 
-const database = require("../core/modules/database");
+const database = require(path.resolve("core/modules/database"));
 
 // Register Account model with sequelize.
 class Account extends Sequelize.Model {}
