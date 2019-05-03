@@ -1,16 +1,28 @@
 // Import required module(s).
+const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const murmurHash = require('murmurhash-native').murmurHash
 
+const randomString = require(path.resolve("core/modules/random")).randomString;
 const errorCodes = require(path.resolve("core/modules/errorCodes"));
-const database = require(path.resolve("core/modules/database"));
 const Account = require(path.resolve("models/account"));
+const EmailVerification = require(path.resolve("models/emailVerification"));
+
+// Load account configuration file.
+let accountConfiguration = undefined;
+fs.readFile("configuration/accountConfiguration.json", (pError, pData) => {
+   if (!pError) {
+      accountConfiguration = JSON.parse(pData);
+   }
+   else { console.log("WARNING : Failed to load account configuration file \"configuration/accountConfiguration.json\"."); }
+});
 
 module.exports = function(pRouter) {
    // Route: /auth/register
    // GET - "/auth/register"
    pRouter.get("/auth/register", (pRequest, pResponse) => {
-      if (pRequest.signedCookies.accountID == undefined) {
+      if (!pRequest.signedCookies.accountID) {
          // User isn't logged in, send them the register page.
          pResponse.sendFile(path.resolve("views/auth/register.html"));
       }
@@ -34,16 +46,22 @@ module.exports = function(pRouter) {
                         username: pRequest.body.usernameEntry,
                         password: pHash,
                         email: pRequest.body.emailEntry,
-                        date_registered: new Date(),
-                        date_lastlogin: null
+                        date_registered: new Date()
                      })
-                     .then(() => {
+                     .then((pUser) => {
+                        // Generate verification entry.
+                        EmailVerification.create({
+                           accountID: pUser.id,
+                           hash: murmurHash(randomString(12)),
+                           date_expires: new Date(new Date().setDate(new Date().getDate() + (accountConfiguration ? parseInt(accountConfiguration.Email.VerificationTimeoutDays, 10) : 30)))
+                        })
+                        .then(() => {
+                           // Send verification email.
+                           //TODO
+                        });
+
                         // Registration succeded.
                         pResponse.send({ result: "success" });
-                     })
-                     .catch(() => { 
-                        // Registration failed.
-                        pResponse.send({ result: "failed" });
                      })
                   }
                   else { logger.log("Failed to create account! Password hash failed."); }

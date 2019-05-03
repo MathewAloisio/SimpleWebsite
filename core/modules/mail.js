@@ -5,11 +5,11 @@ const nodeMailer = require("nodemailer");
 
 const Logger = require("./logger");
 
-// Load configuration file.
-const configuration = JSON.parse(fs.readFileSync("core/cfg/configuration.json"));
-
 // Create the logger for this module.
 const logger = new Logger("core.modules.mail");
+
+// Load configuration file.
+const configuration = JSON.parse(fs.readFileSync("core/cfg/configuration.json"));
 
 // Define Mailer class.
 class Mailer {

@@ -9,11 +9,17 @@ module.exports = function(pRouter) {
    // Route: /auth/login
    // GET - "/auth/login"
    pRouter.get("/auth/login", (pRequest, pResponse) => {
-      if (pRequest.signedCookies.accountID == undefined) {
+      if (!pRequest.signedCookies.accountID) {
          // User isn't logged in, send them the login page.
          pResponse.sendFile(path.resolve("views/auth/login.html"));
       }
-      else { pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID); } // User is logged in, go to logged-in account page.
+      else {
+         // User is logged in, check if they need to be sent to their account page or the verifyEmail page.
+         if (pRequest.signedCookies.emailConfirmed) {
+            pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID);
+         }
+         else { pResponse.redirect("/auth/verifyEmail"); }// The user hasn't verified their email, send them to the email verification page.
+      }
    });
    
    // POST - "/auth/login"
@@ -21,7 +27,7 @@ module.exports = function(pRouter) {
       if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
       // Lookup user by username.
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
-         Account.findOne({ attributes: ["id", "password"], where: { username: pRequest.body.usernameEntry } })
+         Account.findOne({ attributes: ["id", "password", "email_confirmed"], where: { username: pRequest.body.usernameEntry } })
          .then((pUser) => {
             if (pUser) {
                bcrypt.compare(pRequest.body.passwordEntry, pUser.password)
@@ -33,7 +39,8 @@ module.exports = function(pRouter) {
    
                      // Set the user's accountID cookie to the corresponding account ID and send a successful login response.
                      pResponse.cookie("accountID", pUser.id, { signed: true });
-                     pResponse.send({ success: true });
+                     pResponse.cookie("emailConfirmed", pUser.email_confirmed, { signed: true });
+                     pResponse.send({ success: true, accountID: pUser.id, emailConfirmed: pUser.email_confirmed});
                   }
                   else { pResponse.send({ success: false });  }
                })

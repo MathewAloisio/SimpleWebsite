@@ -5,19 +5,23 @@ const Sequelize = require("sequelize");
 const database = require(path.resolve("core/modules/database"));
 
 // Register Appointment model with sequelize.
+/**
+ * Appointment - A model that stores all information neccesary for an appointment.
+ * @author Mathew Aloisio
+ */
 class Appointment extends Sequelize.Model {}
 Appointment.init({
         id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.INTEGER(11).UNSIGNED,
             autoIncrement: true,
             primaryKey: true
         },
-        clientID: {
-            type: Sequelize.INTEGER,
+        bookedByID: {
+            type: Sequelize.INTEGER(11).UNSIGNED,
             allowNull: false
         },
         confirmedByID: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.INTEGER(11).UNSIGNED,
             defaultValue: false
         },
         date_booked: {

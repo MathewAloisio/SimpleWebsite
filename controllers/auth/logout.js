@@ -5,6 +5,7 @@ module.exports = function(pRouter) {
         // Clear account ID cookie on logout, redirect user to login page.
         pResponse.clearCookie("viewingAccountID");
         pResponse.clearCookie("accountID");
+        pResponse.clearCookie("emailConfirmed");
         pResponse.redirect("/auth/login");
     });
 }

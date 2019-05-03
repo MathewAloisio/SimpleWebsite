@@ -22,9 +22,12 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "jquery": "^3.4.0",
+    "jquery.cookie": "^1.4.1",
+    "murmurhash-native": "^3.3.0",
     "mysql": "^2.17.1",
     "mysql2": "^1.6.5",
     "nodemailer": "^6.1.1",
-    "sequelize": "^5.8.0"
+    "sequelize": "^5.8.0",
+    "string-hash": "^1.1.3"
   }
 }

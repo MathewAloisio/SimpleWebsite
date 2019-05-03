@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="/css/default.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 
 <body>
@@ -21,14 +22,8 @@
 <div id="div_result"></div>
 
 <script>
-const getCookie = function(pName) {
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; ++i) {
-        let pair = cookies[i].trim().split('='); // Split key=value into key, value pair.
-        if(pair[0] == pName) return pair[1];
-    }
-
-    return null;
+function getSignedCookie(pName) {
+    return $.cookie(pName).match(/^s:(.*)\..*$/)[1];
 };
 
 $("#loginButton").click(() => {
@@ -37,7 +32,10 @@ $("#loginButton").click(() => {
         // Handle data received from server.
         if (pData.success) {
             $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
-            setTimeout(() => { window.location.replace("/accounts/" + getCookie("accountID")); }, 2); //TODO redirect to user page.
+            if (getSignedCookie("emailConfirmed") == "true") {
+                window.location.replace("/accounts/" + getSignedCookie("accountID"));
+            }
+            else { window.location.replace("/auth/verifyEmail"); }
         }
         else { $("#div_result").html("<p>Invalid username/password!</p>"); }
     });

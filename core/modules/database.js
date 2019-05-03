@@ -5,11 +5,11 @@ const Sequelize = require("sequelize");
 
 const Logger = require("./logger");
 
-// Load configuration file.
-const configuration = JSON.parse(fs.readFileSync("core/cfg/configuration.json"));
-
 // Create the logger for this module.
 const logger = new Logger("core.modules.database");
+
+// Load configuration file.
+const configuration = JSON.parse(fs.readFileSync("core/cfg/configuration.json"));
 
 // Create a sequelize object.
 const sequelize = new Sequelize(

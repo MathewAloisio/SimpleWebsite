@@ -5,11 +5,14 @@ const Sequelize = require("sequelize");
 const database = require(path.resolve("core/modules/database"));
 
 // Register Account model with sequelize.
+/**
+ * Account- A model that represents a personal account, passwords are hashed with bcrypt.
+ * @author Mathew Aloisio
+ */
 class Account extends Sequelize.Model {}
-Account.init(
-    {
+Account.init({
         id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.INTEGER(11).UNSIGNED,
             autoIncrement: true,
             primaryKey: true
         },
@@ -26,14 +29,18 @@ Account.init(
             type: Sequelize.STRING,
             allowNull: false
         },
+        email_confirmed: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         date_registered: {
-            type: Sequelize.DATE
+            type: Sequelize.DATE,
+            allowNull: false
         },
         date_lastlogin: {
-            type: Sequelize.DATE
-        },
-        email_confirmed: {
-            type: Sequelize.BOOLEAN
+            type: Sequelize.DATE,
+            defaultValue: null
         }
     }, 
     { sequelize: database.getSequelize() }

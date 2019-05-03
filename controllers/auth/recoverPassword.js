@@ -7,7 +7,7 @@ module.exports = function(pRouter) {
     // Route: /auth/recoverPassword
     // GET - "/auth/recoverPassword"
     pRouter.get("/auth/recoverPassword", (pRequest, pResponse) => {
-        if (pRequest.signedCookies.accountID == undefined) {
+        if (!pRequest.signedCookies.accountID) {
 			// User isn't logged in, send them the recover password page.
 			pResponse.sendFile(path.resolve("views/auth/recoverPassword.html"));
         }
