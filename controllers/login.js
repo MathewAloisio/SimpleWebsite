@@ -20,7 +20,7 @@ module.exports = function(pRouter) {
       if (pRequest.signedCookies.accountID != undefined) return; // Skip this post request if the user is logged in!
       // Lookup user by username.
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
-         Account.findOne({ where: { username: pRequest.body.usernameEntry } })
+         Account.findOne({ attributes: ["id", "password"], where: { username: pRequest.body.usernameEntry } })
          .then((pUser) => {
             if (pUser) {
                bcrypt.compare(pRequest.body.passwordEntry, pUser.password)

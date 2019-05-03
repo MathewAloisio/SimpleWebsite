@@ -4,40 +4,35 @@ const Sequelize = require("sequelize");
 
 const database = require(path.resolve("core/modules/database"));
 
-// Register Account model with sequelize.
-class Account extends Sequelize.Model {}
-Account.init(
-    {
+// Register Appointment model with sequelize.
+class Appointment extends Sequelize.Model {}
+Appointment.init({
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        username: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: true
-        },
-        password: {
-            type: Sequelize.STRING(60),
+        clientID: {
+            type: Sequelize.INTEGER,
             allowNull: false
         },
-        email: {
-            type: Sequelize.STRING,
-            allowNull: false
+        confirmedByID: {
+            type: Sequelize.INTEGER,
+            defaultValue: false
         },
-        date_registered: {
+        date_booked: {
             type: Sequelize.DATE
         },
-        date_lastlogin: {
+        date_appointment: {
             type: Sequelize.DATE
         },
-        email_confirmed: {
-            type: Sequelize.BOOLEAN
+        date_completed: {
+            type: Sequelize.DATE,
+            defaultValue: null
         }
     }, 
     { sequelize: database.getSequelize() }
 );
 
 // Export the module.
-module.exports = Account;
+module.exports = Appointment;

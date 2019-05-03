@@ -17,6 +17,7 @@
 </form> 
 <button id="loginButton">Login</button><br>
 <button id="signupButton">Sign Up</button><br>
+<button id="recoverPasswordButton" style="margin-top:10%">Recover Password</button><br>
 <div id="div_result"></div>
 
 <script>
@@ -45,6 +46,11 @@ $("#loginButton").click(() => {
 $("#signupButton").click(() => {
     // Request the registration page.
     window.location.replace("/register");
+});
+
+$("#recoverPasswordButton").click(() => {
+    // Request the recover password page.
+    window.location.replace("/recoverPassword");
 });
 </script>
 </div>

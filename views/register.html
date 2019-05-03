@@ -41,10 +41,6 @@ $("#registerButton").click(() => {
                 $("#div_result").html("<p>Registration failed! Username already in use.</p>");
                 break;
         }
-        if (pData.success) {
-            $("#div_result").html("<p>Registration successful! Returning to login page...</p>");
-            setTimeout(() => { window.location.replace("/login"); }, 2);
-        }
     });
 });
 

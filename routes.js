@@ -19,7 +19,13 @@ require("./controllers/logout")(router);
 require("./controllers/register")(router);
 
 // Route: /accounts
-require("./controllers/accounts/accounts")(router);
+require("./controllers/accounts")(router);
+
+// Route: /verifyEmail
+require("./controllers/verifyEmail")(router);
+
+// Route: /recoverPassword
+require("./controllers/recoverPassword")(router);
 //--END OF ROUTES--//
 
 // Export the module.
