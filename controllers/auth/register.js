@@ -31,7 +31,7 @@ module.exports = function(pRouter) {
 
    // POST - "/auth/register"
    pRouter.post("/auth/register", (pRequest, pResponse) => {
-      if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
+      if (pRequest.signedCookies.accountID) { pResponse.sendStatus(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry && pRequest.body.emailEntry) {
          // Check if the username is in use.
          Account.findOne({ where: { username: pRequest.body.usernameEntry } })

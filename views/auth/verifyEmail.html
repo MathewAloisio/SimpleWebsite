@@ -4,11 +4,47 @@
 <head>
     <link rel="stylesheet" href="/css/default.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 
 <body>
 <div class="div_centered">
 <h1 class="text_title">Verify Email</h1><br>
+<form>
+    Change email address:<br>
+    <input type="text" id="emailEntry"><br>
+    Activation Key:<br>
+    <input type="text" id="activationKeyEntry"><br>
+</form> 
+<button id="activateButton">Activate</button><br>
+<button id="resendButton">Resend Email</button><br>
+<button id="logoutButton">Logout</button><br>
+<div id="div_result"></div>
+
+<script>
+function getSignedCookie(pName) {
+    return $.cookie(pName).match(/^s:(.*)\..*$/)[1];
+};
+
+$(document).ready(() => {
+    $("#activateButton").click(() => {
+        if ($("#activationKeyEntry").val().length > 0) {
+            window.location.replace("/auth/verifyEmail?hash=" + $("#activationKeyEntry").val());
+        }
+    });
+
+    $("#resendButton").click(() => {
+        if ($("#emailEntry").val().length > 0) {
+            $("#div_result").html("<p>Resent verification email to \"" + getSignedCookie("email") + "\"...</p>");
+            window.location.replace("/auth/verifyEmail?resend=" + $("#emailEntry").val());
+        }
+    });
+
+    $("#logoutButton").click(() => {
+        window.location.replace("/auth/logout");
+    });
+});
+</script>
 </div>
 </body>
 

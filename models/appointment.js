@@ -12,16 +12,16 @@ const database = require(path.resolve("core/modules/database"));
 class Appointment extends Sequelize.Model {}
 Appointment.init({
         id: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true
         },
         bookedByID: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             allowNull: false
         },
         confirmedByID: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             defaultValue: false
         },
         date_booked: {

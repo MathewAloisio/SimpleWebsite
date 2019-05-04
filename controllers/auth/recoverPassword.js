@@ -16,7 +16,7 @@ module.exports = function(pRouter) {
     
     // POST - "/auth/recoverPassword"
 	pRouter.post("/auth/recoverPassword", (pRequest, pResponse) => {
-        if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
+        if (pRequest.signedCookies.accountID) { pResponse.sendStatus(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
         if (pRequestBody.body.usernameEntry) {
             Account.findOne({ attributes: ["email"], where: { username: pRequest.body.usernameEntry } })
             .then((pUser) => {

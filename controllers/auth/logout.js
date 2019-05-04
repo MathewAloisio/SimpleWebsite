@@ -3,9 +3,10 @@ module.exports = function(pRouter) {
     // GET - "/auth/logout"
     pRouter.get("/auth/logout", (pRequest, pResponse) => {
         // Clear account ID cookie on logout, redirect user to login page.
-        pResponse.clearCookie("viewingAccountID");
-        pResponse.clearCookie("accountID");
-        pResponse.clearCookie("emailConfirmed");
+        pResponse.clearCookie("viewingAccountID", { signed: true });
+        pResponse.clearCookie("accountID", { signed: true });
+        pResponse.clearCookie("email", { signed: true });
+        pResponse.clearCookie("emailConfirmed", { signed: true });
         pResponse.redirect("/auth/login");
     });
 }

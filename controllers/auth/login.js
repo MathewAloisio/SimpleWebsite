@@ -15,7 +15,7 @@ module.exports = function(pRouter) {
       }
       else {
          // User is logged in, check if they need to be sent to their account page or the verifyEmail page.
-         if (pRequest.signedCookies.emailConfirmed) {
+         if (pRequest.signedCookies.emailConfirmed != "true") {
             pResponse.redirect("/accounts/" + pRequest.signedCookies.accountID);
          }
          else { pResponse.redirect("/auth/verifyEmail"); }// The user hasn't verified their email, send them to the email verification page.
@@ -24,10 +24,10 @@ module.exports = function(pRouter) {
    
    // POST - "/auth/login"
    pRouter.post("/auth/login", function(pRequest, pResponse) {
-      if (pRequest.signedCookies.accountID != undefined) { pResponse.send(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
+      if (pRequest.signedCookies.accountID) { pResponse.sendStatus(errorCodes.UNAUTHORIZED); return; } // Skip this post request if the user is logged in!
       // Lookup user by username.
       if (pRequest.body.usernameEntry && pRequest.body.passwordEntry) {
-         Account.findOne({ attributes: ["id", "password", "email_confirmed"], where: { username: pRequest.body.usernameEntry } })
+         Account.findOne({ attributes: ["id", "password", "email", "email_confirmed"], where: { username: pRequest.body.usernameEntry } })
          .then((pUser) => {
             if (pUser) {
                bcrypt.compare(pRequest.body.passwordEntry, pUser.password)
@@ -39,8 +39,9 @@ module.exports = function(pRouter) {
    
                      // Set the user's accountID cookie to the corresponding account ID and send a successful login response.
                      pResponse.cookie("accountID", pUser.id, { signed: true });
+                     pResponse.cookie("email", pUser.email, { signed: true });
                      pResponse.cookie("emailConfirmed", pUser.email_confirmed, { signed: true });
-                     pResponse.send({ success: true, accountID: pUser.id, emailConfirmed: pUser.email_confirmed});
+                     pResponse.send({ success: true });
                   }
                   else { pResponse.send({ success: false });  }
                })

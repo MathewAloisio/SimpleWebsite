@@ -26,29 +26,31 @@ function getSignedCookie(pName) {
     return $.cookie(pName).match(/^s:(.*)\..*$/)[1];
 };
 
-$("#loginButton").click(() => {
-    // Send form data using ajax post request.
-    $.post("/auth/login", $("#loginForm").serialize()).done((pData) => {
-        // Handle data received from server.
-        if (pData.success) {
-            $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
-            if (getSignedCookie("emailConfirmed") == "true") {
-                window.location.replace("/accounts/" + getSignedCookie("accountID"));
+$(document).ready(() => {
+    $("#loginButton").click(() => {
+        // Send form data using ajax post request.
+        $.post("/auth/login", $("#loginForm").serialize()).done((pData) => {
+            // Handle data received from server.
+            if (pData.success) {
+                $("#div_result").html("<p>Login successful! Redirecting to user page...</p>");
+                if (getSignedCookie("emailConfirmed") == "true") {
+                    window.location.replace("/accounts/" + getSignedCookie("accountID"));
+                }
+                else { window.location.replace("/auth/verifyEmail"); }
             }
-            else { window.location.replace("/auth/verifyEmail"); }
-        }
-        else { $("#div_result").html("<p>Invalid username/password!</p>"); }
+            else { $("#div_result").html("<p>Invalid username/password!</p>"); }
+        });
     });
-});
 
-$("#signupButton").click(() => {
-    // Request the registration page.
-    window.location.replace("/auth/register");
-});
+    $("#signupButton").click(() => {
+        // Request the registration page.
+        window.location.replace("/auth/register");
+    });
 
-$("#recoverPasswordButton").click(() => {
-    // Request the recover password page.
-    window.location.replace("/auth/recoverPassword");
+    $("#recoverPasswordButton").click(() => {
+        // Request the recover password page.
+        window.location.replace("/auth/recoverPassword");
+    });
 });
 </script>
 </div>

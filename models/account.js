@@ -12,7 +12,7 @@ const database = require(path.resolve("core/modules/database"));
 class Account extends Sequelize.Model {}
 Account.init({
         id: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true
         },

@@ -5,8 +5,8 @@ module.exports = function(pRouter) {
     // Route: /accounts/
     // GET - /accounts/:accountID
     pRouter.get("/accounts/:accountID", (pRequest, pResponse) => {
-        if (pRequest.signedCookies.accountID != undefined) {
-            if (pRequest.signedCookies.emailConfirmed) {
+        if (pRequest.signedCookies.accountID) {
+            if (pRequest.signedCookies.emailConfirmed == "true") {
                 // Update viewingAccountID cookie before sending the HTML.
                 pResponse.cookie("viewingAccountID", pRequest.param.accountID, { signed: true });
                 pResponse.sendFile(path.resolve("views/accountOverview.html"));
@@ -18,7 +18,7 @@ module.exports = function(pRouter) {
     
     // POST - /accounts/:accountID
     pRouter.post("/accounts/:accountID", (pRequest, pResponse) => {
-        if (!pRequest.signedCookies.accountID || !pRequest.signedCookies.viewingAccountID || !pRequest.signedCookies.emailConfirmed) return; // Skip this post request if the user is not logged in, or not viewing an account page.
+        if (!pRequest.signedCookies.accountID || !pRequest.signedCookies.viewingAccountID || pRequest.signedCookies.emailConfirmed != "true") return; // Skip this post request if the user is not logged in, or not viewing an account page.
         //TODO: 
     });
 }

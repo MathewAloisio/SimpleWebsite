@@ -12,16 +12,16 @@ const database = require(path.resolve("core/modules/database"));
 class EmailVerification extends Sequelize.Model {}
 EmailVerification.init({
         id: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true
         },
         accountID: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             allowNull: false
         },
         hash: {
-            type: Sequelize.INTEGER(11).UNSIGNED,
+            type: Sequelize.INTEGER.UNSIGNED,
             allowNull: false
         },
         date_expires: {
