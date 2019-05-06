@@ -25,8 +25,8 @@ fs.readFile("core/cfg/configuration.json", (pError, pData) => {
       // Connect to the MySQL database and sync all models.
       database.connect();
       database.getSequelize().sync()
-      .then(() => { console.log("MySQL: Models synced wih database!"); })
-      .catch(() => { console.log("MySQL: Failed to sync models with MySQL database!"); });
+      .then(() => { console.log("\nMySQL: Models synced wih database!\n"); })
+      .catch(() => { console.log("\nMySQL: Failed to sync models with MySQL database!\n"); });
 
       // Tell the app to always redirect to https when using SSL.
       if (USE_SSL && sslConfiguration.ForceHTTPS && parseInt(sslConfiguration.ForceHTTPS, 10) != 0) {

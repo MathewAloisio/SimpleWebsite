@@ -17,7 +17,6 @@ An example website that uses Sequelize (MySQL), Node.js, jQuery, HTML, and CSS.
 > **views**
 > - Contains all user-facing data, such as HTML files.
 
-
 > **public**
 > * **css**
 > - Contains all the CSS files for the project.
@@ -27,6 +26,9 @@ An example website that uses Sequelize (MySQL), Node.js, jQuery, HTML, and CSS.
 
 > **controllers** (aka 'routes').
 > - Contains the website logic for given routes.
+
+> **configuration**
+> - Contains all the website-specific configuration files.
 
 > routes.js *- The routing control file for the project.*
 
