@@ -1,0 +1,6 @@
+{
+    "Key": "ssl/private_key.pem",
+    "Certificate": "ssl/public_cert.pem",
+    "Passphrase": "cpu123",
+    "ForceHTTPS": "1"
+}

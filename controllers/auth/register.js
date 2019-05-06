@@ -6,6 +6,7 @@ const murmurHash = require('murmurhash-native').murmurHash
 
 const randomString = require(path.resolve("core/modules/random")).randomString;
 const errorCodes = require(path.resolve("core/modules/errorCodes"));
+const sendVerificationEmail = require(path.resolve("controllers/auth/verifyEmail")).sendVerificationEmail;
 const Account = require(path.resolve("models/account"));
 const EmailVerification = require(path.resolve("models/emailVerification"));
 
@@ -49,15 +50,17 @@ module.exports = function(pRouter) {
                         date_registered: new Date()
                      })
                      .then((pUser) => {
+                        let hash = murmurHash(randomString(12));
+
                         // Generate verification entry.
                         EmailVerification.create({
                            accountID: pUser.id,
-                           hash: murmurHash(randomString(12)),
+                           hash: hash,
                            date_expires: new Date(new Date().setDate(new Date().getDate() + (accountConfiguration ? parseInt(accountConfiguration.Email.VerificationTimeoutDays, 10) : 30)))
                         })
                         .then(() => {
                            // Send verification email.
-                           //TODO
+                           sendVerificationEmail(pRequest.body.emailEntry, hash, pRequest.get("host"));
                         });
 
                         // Registration succeded.

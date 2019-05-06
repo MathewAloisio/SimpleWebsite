@@ -23,7 +23,7 @@ require("./controllers/auth/logout")(router);
 require("./controllers/auth/register")(router);
 
 // Route: /auth/verifyEmail
-require("./controllers/auth/verifyEmail")(router);
+require("./controllers/auth/verifyEmail").initialize(router);
 
 // Route: /auth/recoverPassword
 require("./controllers/auth/recoverPassword")(router);

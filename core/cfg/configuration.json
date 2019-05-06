@@ -1,5 +1,6 @@
 {
 	"Port": "1234",
+	"Address": "127.0.0.1",
 	"MySQL": {
 		"Host": "localhost",
 		"Username": "user",

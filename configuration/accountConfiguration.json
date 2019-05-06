@@ -1,5 +1,9 @@
 {
 	"Email": {
+		"VerificationEmail": {
+			"Sender": "noreply@simplewebsite.com",
+			"Subject": "Email Confirmation - Simple Website"
+		},
 		"VerificationTimeoutDays": "30"
 	}
 }

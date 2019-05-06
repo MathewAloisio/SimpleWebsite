@@ -34,10 +34,10 @@ $(document).ready(() => {
     });
 
     $("#resendButton").click(() => {
-        if ($("#emailEntry").val().length > 0) {
-            $("#div_result").html("<p>Resent verification email to \"" + getSignedCookie("email") + "\"...</p>");
-            window.location.replace("/auth/verifyEmail?resend=" + $("#emailEntry").val());
-        }
+        $("#div_result").html("<p>Resent verification email...</p><br><p>(If the change field is blank, the email you registered with was used.)</p>");
+
+        let email = $("#emailEntry").val();
+        window.location.replace("/auth/verifyEmail?resend=" + (email.length > 0 ? email.trim() : getSignedCookie("email")));
     });
 
     $("#logoutButton").click(() => {
